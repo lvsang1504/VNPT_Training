@@ -9,14 +9,14 @@
     <TextView
         android:id="@+id/tvItem"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="8"
         android:textSize="36sp"/>
 
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="Add"
         android:layout_weight="2" />
 

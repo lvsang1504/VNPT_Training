@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.devpro.a20_07_2022.Broadcast;
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.fragments.FavoriteFragment;
 import com.devpro.a20_07_2022.fragments.HomeFragment;
@@ -51,11 +53,23 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
+    private Broadcast broadcast;
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(broadcast);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        broadcast = new Broadcast();
+        IntentFilter filter = new IntentFilter("android.intent.action.AIRPLANE_MODE");
+        registerReceiver(broadcast, filter);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
