@@ -15,18 +15,12 @@ import com.devpro.a20_07_2022.adapters.CustomAdapter;
 import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Fragment1 extends Fragment {
 
     RecyclerView mRecyclerView;
     CustomAdapter adapter;
     ArrayList listItem = new ArrayList();
     OnClickItemTab1 onClickItemTab1;
-    public Fragment1() {
-        // Required empty public constructor
-    }
 
     public void setOnClickItemTab1(OnClickItemTab1 onClickItemTab1) {
         this.onClickItemTab1 = onClickItemTab1;

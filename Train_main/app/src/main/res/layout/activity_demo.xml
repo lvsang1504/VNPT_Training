@@ -8,16 +8,18 @@
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager1"
+        android:id="@+id/pager"
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="18"
-        android:contentDescription="@string/app_name" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="24dp"
+        android:paddingRight="12dp"
+        android:layout_weight="1" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
         android:contentDescription="@string/app_name" />
 
