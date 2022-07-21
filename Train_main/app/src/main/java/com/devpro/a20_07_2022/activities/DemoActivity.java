@@ -21,21 +21,28 @@ public class DemoActivity extends AppCompatActivity {
     OnClickItemTab1 onClickItemTab1;
     Fragment2 fragment2;
     Fragment1 fragment1;
+    FragmentPagerAdapter adapterViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mapping();
+        mViewPager = findViewById(R.id.pager);
         fragment2 = Fragment2.getInstance();
         fragment1 = Fragment1.getInstance();
         fragment1.setOnClickItemTab1(fragment2.getOnClickItemTab1());
-        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        mTabLayout.setupWithViewPager(mViewPager);
+
+        adapterViewPager = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(adapterViewPager);
+
+//        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+//        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     private void mapping() {
-        mViewPager = findViewById(R.id.viewPager1);
+
         mTabLayout = findViewById(R.id.tabLayout);
     }
 
