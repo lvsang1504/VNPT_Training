@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.activities.DemoActivity;
+import com.devpro.a20_07_2022.activities.DemoBackgroundServiceActivity;
 
 public class NotificationFragment extends Fragment {
 
@@ -31,7 +32,7 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("AAAAA", "DDDDD");
-                Intent intent = new Intent(getContext(), DemoActivity.class);
+                Intent intent = new Intent(getContext(), DemoBackgroundServiceActivity.class);
                 startActivity(intent);
             }
         });

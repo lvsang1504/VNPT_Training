@@ -47,13 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
-    private Broadcast broadcast;
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(broadcast);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override

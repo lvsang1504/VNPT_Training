@@ -26,10 +26,14 @@
         <entry key="..\:/VNPT_Train/20_07_2022/app/src/main/res/menu/drawer_view.xml" value="0.109375" />
         <entry key="..\:/VNPT_Train/20_07_2022/app/src/main/res/menu/menu.xml" value="0.1814814814814815" />
         <entry key="..\:/VNPT_Train/20_07_2022/app/src/main/res/menu/menu_clear.xml" value="0.1814814814814815" />
+        <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/drawable-v24/custom_border_selected.xml" value="0.1" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/activity_demo.xml" value="0.24895833333333334" />
+        <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/activity_demo_background_service.xml" value="0.264" />
+        <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/activity_login.xml" value="0.24895833333333334" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/activity_test_broadcast.xml" value="0.10885416666666667" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/fragment_favorite.xml" value="0.10885416666666667" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/fragment_home.xml" value="0.103125" />
+        <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/fragment_notification.xml" value="0.11875" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/fragment_settings2.xml" value="0.103125" />
         <entry key="..\:/VNPT_Train/Train_main/app/src/main/res/layout/toolbar.xml" value="0.103125" />
       </map>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="20dp"
+    android:padding="10dp"
     android:background="@color/bg_light_blue"
     tools:context=".fragments.HomeFragment">
 
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/open_sans_light"
         android:text="One"
         android:textColor="@color/colorPrimary"
@@ -106,15 +106,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@color/white"
+        android:background="@color/primary"
         app:tabGravity="fill"
-        app:tabTextColor="@color/second_text"
+        app:tabTextColor="@color/bg_light_blue"
         android:layout_marginTop="10dp"
         app:tabIndicatorAnimationMode="elastic"
         app:tabIndicatorGravity="stretch"
         app:tabMode="auto"
         app:tabIndicator="@drawable/custom_border_selected"
-        app:tabSelectedTextColor="@color/second_text"
+        app:tabSelectedTextColor="@color/bg_light_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -133,18 +133,22 @@
         app:layout_constraintVertical_bias="0.0">
 
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:orientation="vertical">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 <!--            <androidx.recyclerview.widget.RecyclerView-->
 <!--                android:id="@+id/recycle_booking_list"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="match_parent"-->
 <!--                android:layout_margin="4dp" />-->
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
-<!--        </LinearLayout>-->
+        </LinearLayout>
 
     </ScrollView>
 
