@@ -9,15 +9,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.LocaleList;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.devpro.a20_07_2022.Broadcast;
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.fragments.FavoriteFragment;
 import com.devpro.a20_07_2022.fragments.HomeFragment;
@@ -28,12 +30,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -123,15 +122,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        toolbar.setTitle("Home");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
                     case R.id.notification:
+                        toolbar.setTitle("Notification");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, notificationFragment).commit();
                         return true;
                     case R.id.favorite:
+                        toolbar.setTitle("Favorite");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, favoriteFragment).commit();
                         return true;
                     case R.id.settings:
+                        toolbar.setTitle("Settings");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, settingsFragment).commit();
                         return true;
                 }

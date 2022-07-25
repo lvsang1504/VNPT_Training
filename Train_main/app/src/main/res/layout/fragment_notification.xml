@@ -6,17 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".fragments.NotificationFragment">
 
-    <TextView
+    <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="172dp"
-        android:layout_marginTop="260dp"
+        android:layout_marginTop="300dp"
         android:background="@color/bg_light_blue"
         android:gravity="center"
-        android:text="Demo"
+        android:text="Demo background service"
         android:textColor="@color/colorPrimary"
         android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
