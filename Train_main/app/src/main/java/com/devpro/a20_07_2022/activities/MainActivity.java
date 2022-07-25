@@ -122,15 +122,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
+                        toolbar.setTitle("Home");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
                     case R.id.notification:
+                        toolbar.setTitle("Notification");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, notificationFragment).commit();
                         return true;
                     case R.id.favorite:
+                        toolbar.setTitle("Favorite");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, favoriteFragment).commit();
                         return true;
                     case R.id.settings:
+                        toolbar.setTitle("Settings");
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, settingsFragment).commit();
                         return true;
                 }

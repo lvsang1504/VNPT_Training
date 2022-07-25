@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devpro.a20_07_2022.R;
+import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.listeners.CategoryResponseListener;
 import com.devpro.a20_07_2022.models.category.Category;
 import com.devpro.a20_07_2022.models.category.CategoryResponse;
@@ -29,12 +30,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment implements CategoryResponseListener {
+public class HomeFragment extends Fragment {
 
     TextView textView, textView2, textView3, textView4, textView5;
     RoundedImageView imageProfile;
     SearchView searchView;
-    AlertDialog dialog;
     TabLayout tabLayout;
     ImageView imageView;
 
@@ -56,15 +56,14 @@ public class HomeFragment extends Fragment implements CategoryResponseListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        navBar  = getActivity().findViewById(R.id.bottom_navigation);
+        navBar = getActivity().findViewById(R.id.bottom_navigation);
 
 
         getViews(view);
 
 
-        manager = new RequestManager(this);
-        manager.getCategories(categoryResponseListener);
-
+        manager = new RequestManager(baseResponseListener);
+        manager.getCategories();
 
 
         //Load Animations
@@ -81,7 +80,6 @@ public class HomeFragment extends Fragment implements CategoryResponseListener {
         searchView.setAnimation(anim_from_left);
         tabLayout.setAnimation(from_right);
         imageView.setAnimation(anim_from_button);
-
 
 
         //Hide status bar and navigation bar at the bottom
@@ -133,44 +131,12 @@ public class HomeFragment extends Fragment implements CategoryResponseListener {
         @Override
         public void didFetch(CategoryResponse response, String message) {
 
-            List<Category> categories = response.data;
-            Log.d("AAAAAA" , categories.toString());
-            for (Category category : categories
-            ) {
-                tabLayout.addTab(tabLayout.newTab().setText(category.category_name));
-            }
 
-//            manager.getRoomByCategory(randomRecipeResponseListener, 1);
-//            dialog.show();
-
-            Picasso.get().load(categories.get(0).category_image).into(imageView);
-
-            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-//                    manager.getRoomByCategory(randomRecipeResponseListener, tab.getPosition() + 1);
-//                    dialog.show();
-                    idCategory = tab.getPosition() + 1;
-                    Picasso.get().load(categories.get(tab.getPosition()).category_image).into(imageView);
-                    imageView.setAnimation(anim_from_button);
-
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
         }
 
         @Override
         public void didError(String message) {
-            Log.d("AAAAAA" , message);
+            Log.d("AAAAAA", message);
 
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
         }
@@ -191,13 +157,49 @@ public class HomeFragment extends Fragment implements CategoryResponseListener {
 
     }
 
-    @Override
-    public void didFetch(CategoryResponse response, String message) {
-        /// get dtata
-    }
+    BaseResponseListener baseResponseListener = new BaseResponseListener() {
+        @Override
+        public void didFetch(Object response) {
+            if (response instanceof CategoryResponse) {
+                CategoryResponse categoryResponse = (CategoryResponse) response;
+                List<Category> categories = categoryResponse.data;
+                Log.d("AAAAAA", categories.toString());
+                for (Category category : categories
+                ) {
+                    tabLayout.addTab(tabLayout.newTab().setText(category.category_name));
+                }
 
-    @Override
-    public void didError(String message) {
-// handle errer
-    }
+
+                Picasso.get().load(categories.get(0).category_image).into(imageView);
+
+                tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        idCategory = tab.getPosition() + 1;
+                        Picasso.get().load(categories.get(tab.getPosition()).category_image).into(imageView);
+                        imageView.setAnimation(anim_from_button);
+
+                    }
+
+                    @Override
+                    public void onTabUnselected(TabLayout.Tab tab) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(TabLayout.Tab tab) {
+
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void didError(int code, String message) {
+            Log.d("AAAAAA", message);
+
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
+    };
+
 }

@@ -3,6 +3,7 @@ package com.devpro.a20_07_2022.repository;
 import android.content.Context;
 import android.util.Log;
 
+import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.listeners.CategoryResponseListener;
 import com.devpro.a20_07_2022.listeners.LoginResponseListener;
 import com.devpro.a20_07_2022.models.category.CategoryResponse;
@@ -26,9 +27,9 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public class RequestManager {
-    CategoryResponseListener listener;
+    BaseResponseListener listener ;
 
-    public RequestManager(CategoryResponseListener listener) {
+    public RequestManager(BaseResponseListener listener) {
         this.listener = listener;
     }
 
@@ -45,24 +46,25 @@ public class RequestManager {
         CallCategories callCategories = retrofit.create(CallCategories.class);
         Call<CategoryResponse> call = callCategories.categoryResponseCall();
         call.enqueue(new Callback<CategoryResponse>() {
+
             @Override
             public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
                 if (!response.isSuccessful()) {
-                    listener.didError(response.message());
+                    listener.didError(response.code(),response.message());
                     return;
                 }
-                listener.didFetch(response.body(), response.message());
+                listener.didFetch(response.body());
             }
 
             @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
-                listener.didError(t.getMessage());
+
             }
         });
     }
 
 
-    public void getLogin(LoginResponseListener listener, UserLogin userLogin) {
+    public void getLogin(UserLogin userLogin) {
         CallLogin callLogin = retrofit1.create(CallLogin.class);
         Call<UserResponse> call = callLogin.loginUser(userLogin);
         call.enqueue(new Callback<UserResponse>() {
@@ -74,12 +76,12 @@ public class RequestManager {
                         try {
                             jsonObject = new JSONObject(response.errorBody().string());
                             JSONObject errorMessage = jsonObject.getJSONObject("error");
-                            listener.didError(errorMessage.getString("message"));
+                            listener.didError(response.code(),errorMessage.getString("message"));
                         } catch (JSONException e) {
-                            listener.didError(e.toString());
+                            listener.didError(response.code(),e.toString());
                             e.printStackTrace();
                         } catch (IOException e) {
-                            listener.didError(e.toString());
+                            listener.didError(response.code(),e.toString());
                             e.printStackTrace();
                         }
                     }
@@ -87,7 +89,7 @@ public class RequestManager {
                 }
 
                 if (response.code() == 200) {
-                    listener.didFetch(response.body(), response.message(), "token");
+                    listener.didFetch(response.body());
                 }
 
                 Log.d("ERRRRROR", response.code() + "");
@@ -95,7 +97,7 @@ public class RequestManager {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                listener.didError(t.getMessage());
+                listener.didError(100,t.getMessage());
             }
         });
     }

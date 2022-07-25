@@ -22,7 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.devpro.a20_07_2022.R;
+import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.listeners.LoginResponseListener;
+import com.devpro.a20_07_2022.models.category.CategoryResponse;
 import com.devpro.a20_07_2022.models.user.UserLogin;
 import com.devpro.a20_07_2022.models.user.UserResponse;
 import com.devpro.a20_07_2022.repository.RequestManager;
@@ -59,8 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView2);
-        requestManager = new RequestManager(this);
 
+        requestManager = new RequestManager(baseResponseListener);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -119,10 +121,34 @@ public class LoginActivity extends AppCompatActivity {
     private void signIn() {
         loading(true);
         if (isValidSignUpDetails()) {
-            requestManager.getLogin(loginResponseListener, new UserLogin(inputEmail.getText().toString(), inputPassword.getText().toString()));
+            requestManager.getLogin( new UserLogin(inputEmail.getText().toString(), inputPassword.getText().toString()));
         }
 
     }
+
+    BaseResponseListener baseResponseListener = new BaseResponseListener() {
+        @Override
+        public void didFetch(Object response) {
+            if (response instanceof UserResponse) {
+                if (response != null ) {
+                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    loading(false);
+                }
+            }
+        }
+
+        @Override
+        public void didError(int code, String message) {
+
+        }
+    };
 
     private final LoginResponseListener loginResponseListener = new LoginResponseListener() {
 
