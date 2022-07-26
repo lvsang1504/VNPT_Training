@@ -1,11 +1,10 @@
 package com.devpro.a20_07_2022.repository;
 
-import android.content.Context;
+
 import android.util.Log;
 
 import com.devpro.a20_07_2022.listeners.BaseResponseListener;
-import com.devpro.a20_07_2022.listeners.CategoryResponseListener;
-import com.devpro.a20_07_2022.listeners.LoginResponseListener;
+import com.devpro.a20_07_2022.models.auth.AccessToken;
 import com.devpro.a20_07_2022.models.category.CategoryResponse;
 import com.devpro.a20_07_2022.models.user.UserLogin;
 import com.devpro.a20_07_2022.models.user.UserResponse;
@@ -14,39 +13,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Headers;
-import retrofit2.http.POST;
 
-public class RequestManager {
-    BaseResponseListener listener ;
+public class ServiceImpl {
 
-    public RequestManager(BaseResponseListener listener) {
-        this.listener = listener;
+
+    BaseResponseListener listener;
+    BaseService baseService;
+
+    public ServiceImpl(BaseResponseListener baseResponseListener) {
+        this.listener = baseResponseListener;
     }
 
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://modelfashion.store")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-    Retrofit retrofit1 = new Retrofit.Builder()
-            .baseUrl("https://reqres.in")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    public void getCategories() {
-        CallCategories callCategories = retrofit.create(CallCategories.class);
-        Call<CategoryResponse> call = callCategories.categoryResponseCall();
+    public void getCategory() {
+//        Call<CategoryResponse> call = baseService.getIService().categoryResponseCall();
+        Call<CategoryResponse> call = baseService.createService(IService.class).categoryResponseCall();
         call.enqueue(new Callback<CategoryResponse>() {
-
             @Override
             public void onResponse(Call<CategoryResponse> call, Response<CategoryResponse> response) {
                 if (!response.isSuccessful() || response.code() != 200) {
@@ -59,16 +44,13 @@ public class RequestManager {
             @Override
             public void onFailure(Call<CategoryResponse> call, Throwable t) {
                 listener.didError(-1,t.getMessage());
-
             }
         });
     }
 
-
     public void login(UserLogin userLogin) {
-        CallLogin callLogin = retrofit1.create(CallLogin.class);
-        Call<UserResponse> call = callLogin.loginUser(userLogin);
-        call.enqueue(new Callback<UserResponse>() {
+        Call<UserResponse> callLogin = baseService.createService(IService.class, new AccessToken()).loginUser(userLogin);
+        callLogin.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.code() == 400) {
@@ -88,11 +70,9 @@ public class RequestManager {
                     }
                     return;
                 }
-
                 if (response.code() == 200) {
                     listener.didFetch(response.body());
                 }
-
                 Log.d("ERRRRROR", response.code() + "");
             }
 
@@ -102,18 +82,4 @@ public class RequestManager {
             }
         });
     }
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    private interface CallCategories {
-        @Headers({"Content-Type: application/json"})
-        @GET("/category/getAll")
-        Call<CategoryResponse> categoryResponseCall();
-    }
-
-    private interface CallLogin {
-        @POST("/api/login")
-        Call<UserResponse> loginUser(@Body UserLogin userLogin);
-    }
-
 }

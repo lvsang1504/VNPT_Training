@@ -1,6 +1,8 @@
 package com.devpro.a20_07_2022.fragments;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +20,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.devpro.a20_07_2022.R;
+import com.devpro.a20_07_2022.activities.LoginActivity;
 import com.devpro.a20_07_2022.listeners.BaseResponseListener;
-import com.devpro.a20_07_2022.listeners.CategoryResponseListener;
 import com.devpro.a20_07_2022.models.category.Category;
 import com.devpro.a20_07_2022.models.category.CategoryResponse;
-import com.devpro.a20_07_2022.repository.RequestManager;
+import com.devpro.a20_07_2022.repository.BaseService;
+import com.devpro.a20_07_2022.repository.ServiceImpl;
+import com.devpro.a20_07_2022.utils.PreferenceManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -30,22 +34,26 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements BaseResponseListener {
 
     TextView textView, textView2, textView3, textView4, textView5;
-    RoundedImageView imageProfile;
+    RoundedImageView btnLogout;
     SearchView searchView;
     TabLayout tabLayout;
     ImageView imageView;
 
     Animation anim_from_button, anim_from_top, anim_from_left, from_right;
 
-    RequestManager manager;
+//    RequestManager manager;
+
+    ServiceImpl service;
 
     BottomNavigationView navBar;
 
 
     RecyclerView recyclerView;
+
+    PreferenceManager preferenceManager;
 
 
     int idCategory = 1;
@@ -60,10 +68,15 @@ public class HomeFragment extends Fragment {
 
 
         getViews(view);
+        preferenceManager = new PreferenceManager(getContext());
 
 
-        manager = new RequestManager(baseResponseListener);
-        manager.getCategories();
+//        manager = new RequestManager(baseResponseListener);
+//        manager.getCategories();
+        service = new ServiceImpl(baseResponseListener);
+        service.getCategory();
+
+//        getCategories();
 
 
         //Load Animations
@@ -104,43 +117,36 @@ public class HomeFragment extends Fragment {
     }
 
     private void setEvents() {
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                if(query!=""){
-//                    manager.getRoomByQuery(listenerQuery,idCategory,query);
-//                }
-//                else{
-//                    tabLayout.setVisibility(View.VISIBLE);
-//                    manager.getCategories(categoryResponseListener);
-//                    manager.getWishlists(wishlistListResponseListener, cookie);
-//                }
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                manager.getRoomByQuery(listenerQuery,idCategory,newText);
-//                return false;
-//            }
-//        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkLogout();
+            }
+        });
+
     }
 
-    private final CategoryResponseListener categoryResponseListener = new CategoryResponseListener() {
-        @Override
-        public void didFetch(CategoryResponse response, String message) {
+    private void checkLogout() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout from app?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        logout();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
+                .show();
+    }
 
-
-        }
-
-        @Override
-        public void didError(String message) {
-            Log.d("AAAAAA", message);
-
-            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
-        }
-    };
+    private void logout() {
+        preferenceManager.clear();
+        BaseService.clearRetrofit();
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
 
 
     private void getViews(View view) {
@@ -151,10 +157,8 @@ public class HomeFragment extends Fragment {
         textView5 = view.findViewById(R.id.textView4);
         searchView = view.findViewById(R.id.searchView);
         imageView = view.findViewById(R.id.imageView);
-        imageProfile = view.findViewById(R.id.imageProfile);
+        btnLogout = view.findViewById(R.id.btnLogout);
         tabLayout = view.findViewById(R.id.tabLayout);
-
-
     }
 
     BaseResponseListener baseResponseListener = new BaseResponseListener() {
@@ -163,13 +167,10 @@ public class HomeFragment extends Fragment {
             if (response instanceof CategoryResponse) {
                 CategoryResponse categoryResponse = (CategoryResponse) response;
                 List<Category> categories = categoryResponse.data;
-                Log.d("AAAAAA", categories.toString());
                 for (Category category : categories
                 ) {
                     tabLayout.addTab(tabLayout.newTab().setText(category.category_name));
                 }
-
-
                 Picasso.get().load(categories.get(0).category_image).into(imageView);
 
                 tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -178,7 +179,6 @@ public class HomeFragment extends Fragment {
                         idCategory = tab.getPosition() + 1;
                         Picasso.get().load(categories.get(tab.getPosition()).category_image).into(imageView);
                         imageView.setAnimation(anim_from_button);
-
                     }
 
                     @Override
@@ -197,9 +197,45 @@ public class HomeFragment extends Fragment {
         @Override
         public void didError(int code, String message) {
             Log.d("AAAAAA", message);
-
             Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
         }
     };
 
+    @Override
+    public void didFetch(Object response) {
+        if (response instanceof CategoryResponse) {
+            CategoryResponse categoryResponse = (CategoryResponse) response;
+            List<Category> categories = categoryResponse.data;
+            Log.d("AAAAAA", categories.toString());
+            for (Category category : categories
+            ) {
+                tabLayout.addTab(tabLayout.newTab().setText(category.category_name));
+            }
+            Picasso.get().load(categories.get(0).category_image).into(imageView);
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    idCategory = tab.getPosition() + 1;
+                    Picasso.get().load(categories.get(tab.getPosition()).category_image).into(imageView);
+                    imageView.setAnimation(anim_from_button);
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void didError(int code, String message) {
+
+    }
 }
