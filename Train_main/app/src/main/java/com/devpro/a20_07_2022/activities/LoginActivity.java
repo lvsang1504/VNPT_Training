@@ -1,11 +1,7 @@
 package com.devpro.a20_07_2022.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -24,20 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.listeners.LoginResponseListener;
-import com.devpro.a20_07_2022.models.category.CategoryResponse;
 import com.devpro.a20_07_2022.models.user.UserLogin;
 import com.devpro.a20_07_2022.models.user.UserResponse;
-import com.devpro.a20_07_2022.repository.RequestManager;
 import com.devpro.a20_07_2022.repository.ServiceImpl;
 import com.devpro.a20_07_2022.utils.Constants;
 import com.devpro.a20_07_2022.utils.PreferenceManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -149,7 +136,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void didError(int code, String message) {
-
+            Toast.makeText(LoginActivity.this, "Error " + code + ": " + message, Toast.LENGTH_LONG).show();
+            loading(false);
         }
     };
 

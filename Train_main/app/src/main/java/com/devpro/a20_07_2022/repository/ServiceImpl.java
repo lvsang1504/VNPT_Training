@@ -6,6 +6,8 @@ import android.util.Log;
 import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.models.auth.AccessToken;
 import com.devpro.a20_07_2022.models.category.CategoryResponse;
+import com.devpro.a20_07_2022.models.product.ProductDetailResponse;
+import com.devpro.a20_07_2022.models.product.ProductResponse;
 import com.devpro.a20_07_2022.models.user.UserLogin;
 import com.devpro.a20_07_2022.models.user.UserResponse;
 
@@ -48,6 +50,45 @@ public class ServiceImpl {
         });
     }
 
+    public void getAllProduct() {
+        Call<ProductResponse> call = baseService.createService(IService.class).productResponseCall();
+        call.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                if (!response.isSuccessful() || response.code() != 200) {
+                    listener.didError(response.code(),response.message());
+                    return;
+                }
+                listener.didFetch(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                listener.didError(-1,t.getMessage());
+            }
+        });
+    }
+
+    public void getProductDetail(String id) {
+        Call<ProductDetailResponse> call = baseService.createService(IService.class).productDetailResponseCall(id);
+        call.enqueue(new Callback<ProductDetailResponse>() {
+            @Override
+            public void onResponse(Call<ProductDetailResponse> call, Response<ProductDetailResponse> response) {
+                if (!response.isSuccessful() || response.code() != 200) {
+                    listener.didError(response.code(),response.message());
+                    return;
+                }
+                listener.didFetch(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ProductDetailResponse> call, Throwable t) {
+                listener.didError(-1,t.getMessage());
+            }
+        });
+    }
+
+
     public void login(UserLogin userLogin) {
         Call<UserResponse> callLogin = baseService.createService(IService.class, new AccessToken()).loginUser(userLogin);
         callLogin.enqueue(new Callback<UserResponse>() {
@@ -58,8 +99,7 @@ public class ServiceImpl {
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(response.errorBody().string());
-                            JSONObject errorMessage = jsonObject.getJSONObject("error");
-                            listener.didError(response.code(),errorMessage.getString("message"));
+                            listener.didError(response.code(),jsonObject.getString("error"));
                         } catch (JSONException e) {
                             listener.didError(response.code(),e.toString());
                             e.printStackTrace();

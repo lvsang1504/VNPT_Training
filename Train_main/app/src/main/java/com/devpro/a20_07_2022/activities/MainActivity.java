@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.devpro.a20_07_2022.Broadcast;
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.fragments.FavoriteFragment;
 import com.devpro.a20_07_2022.fragments.HomeFragment;

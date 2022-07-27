@@ -101,35 +101,16 @@
         app:layout_constraintTop_toBottomOf="@id/textView3"
         tools:targetApi="lollipop" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@color/primary"
-        app:tabGravity="fill"
-        app:tabTextColor="@color/bg_light_blue"
-        android:layout_marginTop="10dp"
-        app:tabIndicatorAnimationMode="elastic"
-        app:tabIndicatorGravity="stretch"
-        app:tabMode="auto"
-        app:tabIndicator="@drawable/custom_border_selected"
-        app:tabSelectedTextColor="@color/bg_light_blue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/searchView"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabLayout"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintVertical_bias="0.0">
 
 
@@ -137,7 +118,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/primary"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchView"
+                app:tabGravity="fill"
+                app:tabIndicator="@drawable/custom_border_selected"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorGravity="stretch"
+                app:tabMode="auto"
+                app:tabSelectedTextColor="@color/bg_light_blue"
+                app:tabTextColor="@color/bg_light_blue" />
 <!--            <androidx.recyclerview.widget.RecyclerView-->
 <!--                android:id="@+id/recycle_booking_list"-->
 <!--                android:layout_width="match_parent"-->
@@ -150,27 +147,48 @@
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:scaleType="centerCrop"/>
-            <TextView
-                android:text="Category"
-                android:textSize="20dp"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewProduct"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:text="All Product Belong "
+                        android:textSize="20dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/categoryName"
+                        android:textSize="20dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
-    </ScrollView>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
