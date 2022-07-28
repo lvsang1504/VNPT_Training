@@ -1,11 +1,7 @@
 package com.devpro.a20_07_2022.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -24,19 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.devpro.a20_07_2022.R;
 import com.devpro.a20_07_2022.listeners.BaseResponseListener;
 import com.devpro.a20_07_2022.listeners.LoginResponseListener;
-import com.devpro.a20_07_2022.models.category.CategoryResponse;
 import com.devpro.a20_07_2022.models.user.UserLogin;
 import com.devpro.a20_07_2022.models.user.UserResponse;
-import com.devpro.a20_07_2022.repository.RequestManager;
+import com.devpro.a20_07_2022.repository.ServiceImpl;
 import com.devpro.a20_07_2022.utils.Constants;
 import com.devpro.a20_07_2022.utils.PreferenceManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -46,7 +34,9 @@ public class LoginActivity extends AppCompatActivity {
     EditText inputEmail, inputPassword;
     ProgressBar progressBar;
     Animation anim_from_button, anim_from_top, anim_from_left;
-    RequestManager requestManager;
+    //    RequestManager requestManager;
+    ServiceImpl service;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         textView2 = findViewById(R.id.textView2);
 
-        requestManager = new RequestManager(baseResponseListener);
+//        requestManager = new RequestManager(baseResponseListener);
+        service = new ServiceImpl(baseResponseListener);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
 
@@ -128,7 +119,8 @@ public class LoginActivity extends AppCompatActivity {
     private void signIn() {
         loading(true);
         if (isValidSignUpDetails()) {
-            requestManager.getLogin( new UserLogin(inputEmail.getText().toString(), inputPassword.getText().toString()));
+            UserLogin userLogin = new UserLogin(inputEmail.getText().toString(), inputPassword.getText().toString());
+            service.login(userLogin);
         }
 
     }
@@ -137,13 +129,11 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void didFetch(Object response) {
             if (response instanceof UserResponse) {
-                if (response != null ) {
+                if (response != null) {
                     preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
-
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-
                 } else {
                     Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
                     loading(false);
@@ -153,7 +143,8 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void didError(int code, String message) {
-
+            Toast.makeText(LoginActivity.this, "Error " + code + ": " + message, Toast.LENGTH_LONG).show();
+            loading(false);
         }
     };
 
@@ -162,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void didFetch(UserResponse userResponse, String message, String cookie) {
             Log.d("TOKEN", userResponse.page + "");
-            if (userResponse != null ) {
+            if (userResponse != null) {
                 preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
 
                 preferenceManager.putString(Constants.KEY_TOKEN, cookie);
@@ -213,7 +204,6 @@ public class LoginActivity extends AppCompatActivity {
             progressBar.setVisibility(View.INVISIBLE);
         }
     }
-
 
 
 }

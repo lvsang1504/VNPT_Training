@@ -18,24 +18,12 @@ import com.devpro.a20_07_2022.activities.DemoBackgroundServiceActivity;
 
 public class NotificationFragment extends Fragment {
 
-    TextView button;
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification,
                 container, false);
-        Log.d("AAAAA", "DDDDD");
-        button = view.findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("AAAAA", "DDDDD");
-                Intent intent = new Intent(getContext(), DemoBackgroundServiceActivity.class);
-                startActivity(intent);
-            }
-        });
+
         return view;
     }
 }

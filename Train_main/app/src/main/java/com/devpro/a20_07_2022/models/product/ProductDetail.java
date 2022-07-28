@@ -1,11 +1,12 @@
 package com.devpro.a20_07_2022.models.product;
 
-public class Product {
-    public String category_name;
-    public int category_id;
+public class ProductDetail {
     public String product_id;
     public String product_name;
-    public String product_image;
     public int price;
     public Object discount;
+    public String product_image;
+    public String product_bgr1;
+    public String product_bgr2;
+    public String product_bgr3;
 }
