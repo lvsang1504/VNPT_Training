@@ -116,6 +116,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        textCreateNewAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+            }
+        });
+
     }
 
     private void signIn() {
