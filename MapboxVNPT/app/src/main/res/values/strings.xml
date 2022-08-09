@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Mapbox VNPT</string>
+    <string name="mapbox_access_token" translatable="false">pk.eyJ1Ijoic2FuZzAxMCIsImEiOiJjbDY4cGliZTkwZmk2M2JsenB2OTRqc21vIn0.BSzfb21zO23xkMCwIJae-g</string>
+</resources>
