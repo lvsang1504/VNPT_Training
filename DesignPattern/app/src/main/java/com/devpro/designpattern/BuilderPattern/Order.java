@@ -11,7 +11,8 @@ public class Order {
     private SauceType sauceType;
     private VegetableType vegetableType;
 
-    public Order(OrderType orderType, BreadType breadType, SauceType sauceType, VegetableType vegetableType) {
+    public Order(OrderType orderType,
+                 BreadType breadType, SauceType sauceType, VegetableType vegetableType) {
         super();
         this.orderType = orderType;
         this.breadType = breadType;
@@ -21,8 +22,8 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order [orderType=" + orderType + ", breadType=" + breadType + ", sauceType=" + sauceType
-                + ", vegetableType=" + vegetableType + "]";
+        return "Order [orderType=" + orderType + ", breadType=" + breadType +
+                ", sauceType=" + sauceType + ", vegetableType=" + vegetableType + "]";
     }
 
     public OrderType getOrderType() {
